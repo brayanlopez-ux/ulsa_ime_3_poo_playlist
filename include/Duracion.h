@@ -15,11 +15,9 @@ public:
     int getMinutos() const;
     int getSegundos() const;
 
-    // TODO 1.2: declara  int totalSegundos() const;
+    int totalSegundos() const;
 
-    // TODO 1.3: declara  void imprimir() const;
-
-    // Pregunta: ¿qué significa el const al final de estos métodos?
+    void imprimir() const;
 };
 
 #endif
