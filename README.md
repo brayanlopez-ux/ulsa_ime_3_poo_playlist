@@ -29,7 +29,6 @@ Verbos: __Organizar, agrupar, agregar, calcular, mostrar, imprimir, validar ___
 **2.1 Diagrama de clases**
 
 ![Diagrama de clases](diseno_solucion.png)
-c:\Users\braya\Downloads\diseno_solucion.drawio.png
 
 **2.2 Justificación de cada relación**
 
@@ -47,40 +46,41 @@ c:\Users\braya\Downloads\diseno_solucion.drawio.png
 
 | # | Duda | Cómo la resolví | Fuente |
 | --- | --- | --- | --- |
-| 1 | __¿Cómo inicializar el atributo duracion desde el constructor de Pista? ___ | __Utilizando la lista de inicialización (: duracion(min, seg)) en la definición del constructor. ___ | ___Apuntes de clase / Documentación C++.__ |
-| 2 | _____ | _____ | _____ |
-| 3 | _____ | _____ | _____ |
+| 1 | ¿Cómo inicializar el atributo duracion desde el constructor de Pista? | Utilizando la lista de inicialización (`: duracion(min, seg)`) en la definición del constructor. | Apuntes de clase / Documentación C++. |
+| 2 | ¿Por qué conviene validar el tiempo en el constructor de `Duracion` y no en el `main`? | Para garantizar el encapsulamiento. La clase es la única responsable de asegurar que sus datos siempre tengan un estado válido desde que nace el objeto. | Análisis del código. |
+| 3 | ¿Qué pasaría si se quita `duracion(min, seg)` de la lista de inicialización en `Pista`? | El compilador arroja un error porque intentaría llamar a un constructor por defecto (sin parámetros) para `Duracion`, el cual no existe. | Prueba en el compilador (error). |
 
 **3.2 Experimentos guiados**
 
-Experimento 1, orden de construcción y destrucción: _____
+**3.2 Experimentos guiados**
 
-Experimento 2, ¿quién es dueño de quién?: _____
+Experimento 1, orden de construcción y destrucción: Primero se inicializa la clase base (`Pista`) junto con sus componentes (`Duracion`), y al final se construye la clase derivada (`Cancion` o `Podcast`). La destrucción de los objetos ocurre en el orden exactamente inverso.
 
-Experimento 3, un objeto en dos playlists: _____
+Experimento 2, ¿quién es dueño de quién?: La clase `Pista` es dueña absoluta de `Duracion` (Composición: si la pista se elimina, su duración también). Sin embargo, `Playlist` NO es dueña de las pistas (Agregación: solo almacena punteros, por lo que las canciones siguen existiendo aunque la playlist se destruya).
+
+Experimento 3, un objeto en dos playlists: Al modificar el título de una canción que está en dos listas distintas, el cambio se refleja automáticamente en ambas. Esto se debe a que las playlists no guardan copias de la canción, sino punteros que apuntan a la misma instancia en la memoria.
 
 ## Fase 4. Probar y mejorar
 
 **4.1 Tabla de pruebas**
 
 | # | Caso | Resultado esperado | Resultado obtenido | ¿Pasa? |
-| --- | --- | --- | --- | --- |
-| 1 | Duración normal `Duracion(3, 45)` | 3:45 | _____ | _____ |
-| 2 | Segundos mayores a 59 `Duracion(0, 75)` | 1:15 | _____ | _____ |
-| 3 | Valores negativos `Duracion(-2, 10)` | 0:00 | _____ | _____ |
-| 4 | Título vacío | "Sin título" | _____ | _____ |
-| 5 | Playlist vacía | 0:00 y 0 pistas | _____ | _____ |
-| 6 | Canción duplicada | La segunda vez devuelve `false` | _____ | _____ |
-| 7 | Puntero nulo | Devuelve `false` | _____ | _____ |
-| 8 | Total con 2 canciones y 1 podcast | Suma correcta en m:ss | _____ | _____ |
-
+|---|---|---|---|---|
+| 1 | Duración normal | `Duracion(3, 45)` | 3:45 | **3:45 (Éxito)** |
+| 2 | Segundos mayores a 59 | `Duracion(0, 75)` | 1:15 | **1:15 (Éxito)** |
+| 3 | Valores negativos | `Duracion(-2, 10)` | 0:00 | **0:00 (Éxito)** |
+| 4 | Título vacío | Canción con título `""` | "Sin título" | **"Sin título" (Éxito)** |
+| 5 | Playlist vacía | `duracionTotal()` y `cantidadPistas()` | 0:00 y 0 pistas | **0:00 y 0 pistas (Éxito)** |
+| 6 | Canción duplicada | Agregar dos veces la misma canción | La segunda vez devuelve `false` | **Devuelve `false` (Éxito)** |
+| 7 | Puntero nulo | `agregarCancion(nullptr)` | Devuelve `false` | **Devuelve `false` (Éxito)** |
+| 8 | Total mixto | 2 canciones y 1 podcast | Suma correcta en m:ss | **141:34 (Éxito)** |
 **4.2 Bitácora de mejoras**
 
 | # | Falla o mejora detectada | Qué cambié | Por qué |
 | --- | --- | --- | --- |
-| 1 | _____ | _____ | _____ |
-| 2 | _____ | _____ | _____ |
-
+| 1 | Caída por punteros nulos. | Validé `if (puntero == nullptr)` al agregar. | Evitar que el programa falle. |
+| 2 | Pistas duplicadas. | Ciclo `for` para comparar memoria. | Evitar repetir la misma pista. |
+| 3 | Tiempos inválidos. | Normalización en constructor `Duracion`. | Garantizar datos válidos siempre. |
 Retos opcionales que intenté: _____
 
 ## Fase 5. Publicar en GitHub
